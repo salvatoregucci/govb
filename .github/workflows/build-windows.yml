@@ -2,12 +2,16 @@ name: Build Windows app
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 permissions:
   contents: read
 
 jobs:
   build:
+    name: Publish Windows x64
     runs-on: windows-latest
     steps:
       - name: Check out source
@@ -18,13 +22,19 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Publish self-contained Windows x64 app
-        run: dotnet publish .\DynamicIsland.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o .\publish
+      - name: Restore dependencies
+        run: dotnet restore .\DynamicIsland.csproj
+
+      - name: Publish self-contained app
+        run: dotnet publish .\DynamicIsland.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o .\publish --no-restore
+
+      - name: Create downloadable ZIP
+        run: Compress-Archive -Path .\publish\* -DestinationPath .\DynamicIsland-win-x64.zip -Force
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: DynamicIsland-win-x64
-          path: .\publish\
+          path: .\DynamicIsland-win-x64.zip
           if-no-files-found: error
           retention-days: 14
