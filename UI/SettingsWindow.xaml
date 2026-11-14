@@ -1,0 +1,290 @@
+<Window x:Class="DynamicIsland.UI.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Ayarlar" Width="420" Height="560"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Topmost="True"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+    <Window.Resources>
+        <Style x:Key="SectionTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#8E8E93" />
+            <Setter Property="Margin" Value="6,18,0,7" />
+        </Style>
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="#1C1C1E" />
+            <Setter Property="CornerRadius" Value="14" />
+        </Style>
+        <Style x:Key="RowText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13.5" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="LanguagePicker" TargetType="ComboBox">
+            <Setter Property="Width" Value="170" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background" Value="#2C2C2E" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="8,5" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+        </Style>
+
+        <!-- Language segment button: the selected item has a green fill. -->
+        <Style x:Key="Segment" TargetType="RadioButton">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Margin" Value="6,0,0,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="bg" CornerRadius="9" Background="#2C2C2E" Padding="14,7">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="bg" Property="Background" Value="#34C759" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Theme option: selected card receives a green border. -->
+        <Style x:Key="ThemeOption" TargetType="RadioButton">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="card" Background="#2C2C2E" CornerRadius="12"
+                                BorderThickness="2" BorderBrush="Transparent" Padding="10,9">
+                            <ContentPresenter HorizontalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="card" Property="BorderBrush" Value="#34C759" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Dark text input for Client ID and Secret. -->
+        <Style x:Key="DarkInput" TargetType="TextBox">
+            <Setter Property="Background" Value="#2C2C2E" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="CaretBrush" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="9">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="DarkPasswordInput" TargetType="PasswordBox">
+            <Setter Property="Background" Value="#2C2C2E" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="CaretBrush" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="9">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Flat button for Save and Retry actions. -->
+        <Style x:Key="FlatButton" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="9" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.85" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="#0E0E10" CornerRadius="18" BorderBrush="#26FFFFFF" BorderThickness="1">
+        <Grid Margin="20,16,20,18">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Grid Grid.Row="0">
+                <TextBlock x:Name="HeaderTitle" Text="Ayarlar" FontSize="17" FontWeight="Bold"
+                           Foreground="White" VerticalAlignment="Center" />
+                <Button x:Name="BtnClose" Content="&#xE711;" Style="{StaticResource IconButton}"
+                        Width="30" Height="30" FontSize="11"
+                        HorizontalAlignment="Right" Click="BtnClose_Click" />
+            </Grid>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" Margin="0,4,0,0">
+                <StackPanel>
+
+                    <!-- Language -->
+                    <TextBlock x:Name="LblLanguage" Style="{StaticResource SectionTitle}" />
+                    <Border Style="{StaticResource Card}" Padding="14,4">
+                        <Grid>
+                            <TextBlock x:Name="LblLanguageRow" Style="{StaticResource RowText}" Margin="0,10" />
+                            <ComboBox x:Name="LanguagePicker" Style="{StaticResource LanguagePicker}"
+                                      HorizontalAlignment="Right" VerticalAlignment="Center"
+                                      DisplayMemberPath="DisplayName" SelectedValuePath="Code"
+                                      SelectionChanged="LanguagePicker_SelectionChanged" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Theme -->
+                    <TextBlock x:Name="LblTheme" Style="{StaticResource SectionTitle}" />
+                    <Border Style="{StaticResource Card}" Padding="12">
+                        <StackPanel x:Name="ThemePanel" Orientation="Horizontal" HorizontalAlignment="Center" />
+                    </Border>
+
+                    <!-- Modules -->
+                    <TextBlock x:Name="LblModules" Style="{StaticResource SectionTitle}" />
+                    <Border Style="{StaticResource Card}" Padding="14,2">
+                        <StackPanel>
+                            <Grid Margin="0,11">
+                                <TextBlock x:Name="LblVisualizer" Style="{StaticResource RowText}" />
+                                <CheckBox x:Name="ChkVisualizer" Style="{StaticResource Switch}"
+                                          HorizontalAlignment="Right" Click="Setting_Toggled" />
+                            </Grid>
+                            <Border Height="1" Background="#26FFFFFF" />
+                            <Grid Margin="0,11">
+                                <TextBlock x:Name="LblNotifications" Style="{StaticResource RowText}" />
+                                <CheckBox x:Name="ChkNotifications" Style="{StaticResource Switch}"
+                                          HorizontalAlignment="Right" Click="Setting_Toggled" />
+                            </Grid>
+                            <TextBlock x:Name="LblNotifHint" FontSize="10.5" Foreground="#8E8E93"
+                                       TextWrapping="Wrap" Margin="0,0,0,10" />
+                            <Border Height="1" Background="#26FFFFFF" />
+                            <Grid Margin="0,11">
+                                <TextBlock x:Name="LblMediaIcon" Style="{StaticResource RowText}" />
+                                <CheckBox x:Name="ChkMediaIcon" Style="{StaticResource Switch}"
+                                          HorizontalAlignment="Right" Click="Setting_Toggled" />
+                            </Grid>
+                            <Border Height="1" Background="#26FFFFFF" />
+                            <Grid Margin="0,11">
+                                <TextBlock x:Name="LblBattery" Style="{StaticResource RowText}" />
+                                <CheckBox x:Name="ChkBattery" Style="{StaticResource Switch}"
+                                          HorizontalAlignment="Right" Click="Setting_Toggled" />
+                            </Grid>
+                            <Border Height="1" Background="#26FFFFFF" />
+                            <Grid Margin="0,11">
+                                <TextBlock x:Name="LblStartup" Style="{StaticResource RowText}" />
+                                <CheckBox x:Name="ChkStartup" Style="{StaticResource Switch}"
+                                          HorizontalAlignment="Right" Click="Setting_Toggled" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Tabs -->
+                    <TextBlock x:Name="LblViews" Style="{StaticResource SectionTitle}" />
+                    <Border Style="{StaticResource Card}" Padding="14,2">
+                        <StackPanel>
+                            <Grid Margin="0,11">
+                                <TextBlock x:Name="LblViewCal" Style="{StaticResource RowText}" />
+                                <CheckBox x:Name="ChkViewCal" Style="{StaticResource Switch}"
+                                          HorizontalAlignment="Right" Click="Setting_Toggled" />
+                            </Grid>
+                            <Border Height="1" Background="#26FFFFFF" />
+                            <Grid Margin="0,11">
+                                <TextBlock x:Name="LblViewTray" Style="{StaticResource RowText}" />
+                                <CheckBox x:Name="ChkViewTray" Style="{StaticResource Switch}"
+                                          HorizontalAlignment="Right" Click="Setting_Toggled" />
+                            </Grid>
+                            <Border Height="1" Background="#26FFFFFF" />
+                            <Grid Margin="0,11">
+                                <TextBlock x:Name="LblViewBt" Style="{StaticResource RowText}" />
+                                <CheckBox x:Name="ChkViewBt" Style="{StaticResource Switch}"
+                                          HorizontalAlignment="Right" Click="Setting_Toggled" />
+                            </Grid>
+                            <Border Height="1" Background="#26FFFFFF" />
+                            <Grid Margin="0,11">
+                                <TextBlock x:Name="LblViewDiscord" Style="{StaticResource RowText}" />
+                                <CheckBox x:Name="ChkViewDiscord" Style="{StaticResource Switch}"
+                                          HorizontalAlignment="Right" Click="Setting_Toggled" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Discord -->
+                    <TextBlock x:Name="LblDiscordSection" Style="{StaticResource SectionTitle}" />
+                    <Border Style="{StaticResource Card}" Padding="14,12">
+                        <StackPanel>
+                            <TextBlock x:Name="LblDiscordClientId" FontSize="11" Foreground="#8E8E93" Margin="0,0,0,5" />
+                            <TextBox x:Name="TxtDiscordClientId" Style="{StaticResource DarkInput}" />
+                            <TextBlock x:Name="LblDiscordClientSecret" FontSize="11" Foreground="#8E8E93" Margin="0,12,0,5" />
+                            <PasswordBox x:Name="TxtDiscordClientSecret" Style="{StaticResource DarkPasswordInput}" />
+
+                            <Grid Margin="0,14,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Ellipse x:Name="DiscordStatusDot" Width="7" Height="7" Fill="#8E8E93"
+                                             VerticalAlignment="Center" />
+                                    <TextBlock x:Name="LblDiscordStatus" FontSize="11.5" Margin="7,0,0,0"
+                                               Foreground="#8E8E93" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button x:Name="BtnDiscordRetry" Style="{StaticResource FlatButton}"
+                                            Background="#2C2C2E" Foreground="White" FontSize="11.5" Padding="10,6"
+                                            Margin="0,0,6,0" Click="BtnDiscordRetry_Click" />
+                                    <Button x:Name="BtnDiscordSave" Style="{StaticResource FlatButton}"
+                                            Background="#34C759" Foreground="Black" FontSize="11.5" FontWeight="SemiBold"
+                                            Padding="12,6" Click="BtnDiscordSave_Click" />
+                                </StackPanel>
+                            </Grid>
+
+                            <TextBlock x:Name="LblDiscordHint" FontSize="9.5" Foreground="#8E8E93"
+                                       TextWrapping="Wrap" Margin="0,12,0,0" Opacity="0.8" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- About -->
+                    <TextBlock x:Name="LblAbout" Style="{StaticResource SectionTitle}" />
+                    <Border Style="{StaticResource Card}" Padding="14,12">
+                        <StackPanel>
+                            <Grid>
+                                <TextBlock x:Name="LblRam" Style="{StaticResource RowText}" FontSize="12.5" />
+                                <TextBlock x:Name="TxtRam" HorizontalAlignment="Right" FontSize="12.5"
+                                           Foreground="#34C759" FontWeight="SemiBold" />
+                            </Grid>
+                            <Grid Margin="0,8,0,0">
+                                <TextBlock x:Name="LblVersion" Style="{StaticResource RowText}" FontSize="12.5" />
+                                <TextBlock Text="1.0.0" HorizontalAlignment="Right" FontSize="12.5"
+                                           Foreground="#8E8E93" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</Window>

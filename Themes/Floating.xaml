@@ -1,0 +1,19 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Floating theme: 8 px top offset, fully rounded, opaque black. -->
+    <sys:Boolean x:Key="AttachTop">False</sys:Boolean>
+    <Thickness x:Key="IslandTopMargin">0,8,0,0</Thickness>
+
+    <SolidColorBrush x:Key="IslandBackgroundBrush" Color="#0A0A0C" />
+    <SolidColorBrush x:Key="IslandBorderBrush" Color="#14FFFFFF" />
+    <Thickness x:Key="IslandBorderThickness">1</Thickness>
+
+    <SolidColorBrush x:Key="CardBackgroundBrush" Color="#12FFFFFF" />
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#8CFFFFFF" />
+    <SolidColorBrush x:Key="AccentBrush" Color="#34C759" />
+    <SolidColorBrush x:Key="ProgressTrackBrush" Color="#24FFFFFF" />
+
+</ResourceDictionary>
